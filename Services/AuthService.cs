@@ -4,6 +4,8 @@ using mks.Helpers;
 using mks.Models;
 using mks.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using mks.Dtos;
+using System.Diagnostics;
 
 namespace mks.Services
 {
@@ -84,7 +86,7 @@ namespace mks.Services
             await _context.SaveChangesAsync();
 
             
-            var otp = await _otpService.GenerateOtpAsync();
+            var otp = await _otpService.GenerateOtpAsync(dto.Email);
 
             await _otpService.SaveOtpAsync(
                 user.Email,
@@ -235,7 +237,7 @@ namespace mks.Services
                         return response;
                     }
 
-                    var otp = await _otpService.GenerateOtpAsync();
+                    var otp = await _otpService.GenerateOtpAsync(dto.Email);
 
                     await _otpService.SaveOtpAsync(
                         user.Email,
@@ -290,5 +292,7 @@ namespace mks.Services
 
                     return response;
                 }
-            }
+
+       
+    }
 }

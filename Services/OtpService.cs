@@ -4,6 +4,8 @@ using mks.Data;
 using mks.Helpers;
 using mks.Models;
 using mks.Interfaces;
+using mks.DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 
@@ -22,16 +24,22 @@ namespace mks.Services
             _emailService = emailService;
         }
 
-        public async Task<string> GenerateOtpAsync()
+        public async Task<string> GenerateOtpAsync(string email)
         {
-            var random = new Random();
+             var random = new Random();
+            var otp = random.Next(100000, 999999).ToString();
+            
+            
+            await SaveOtpAsync(email, otp); 
 
-            return random.Next(100000, 999999).ToString();
+        return otp;
+            
         }
+       
 
         public async Task SaveOtpAsync(string email, string otp)
         {
-            // Remove any previous OTP for this email
+           
             var existingOtp = await _context.SignupOtps
                 .FirstOrDefaultAsync(x => x.Email == email);
 
@@ -56,7 +64,18 @@ namespace mks.Services
 
             await _emailService.SendOtpAsync(email, otp);
         }
+          public async Task<ServiceResponse> ResendOtpAsync(string email) 
+        {
+           
+            var newOtpCode = await GenerateOtpAsync(email);
 
+            await SaveOtpAsync(email, newOtpCode);
+            return new ServiceResponse
+        {
+            Success = true,
+            Message = "OTP resent successfully"
+        };
+        }
         public async Task<bool> VerifyOtpAsync(string email, string otp)
         {
             var record = await _context.SignupOtps
@@ -92,5 +111,6 @@ namespace mks.Services
                 await _context.SaveChangesAsync();
             }
         }
+
     }
 }

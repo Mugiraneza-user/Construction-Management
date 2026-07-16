@@ -161,3 +161,4 @@ D:\Internership Projects\house Management Backend\mks\bin\Debug\net10.0\zh-Hant\
 D:\Internership Projects\house Management Backend\mks\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\Internership Projects\house Management Backend\mks\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Internership Projects\house Management Backend\mks\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Internership Projects\house Management Backend\mks\obj\Debug\net10.0\mks.sourcelink.json

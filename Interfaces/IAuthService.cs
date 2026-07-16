@@ -1,3 +1,4 @@
+using mks.Dtos;
 using mks.DTOs;
 
 namespace mks.Interfaces
@@ -13,5 +14,8 @@ namespace mks.Interfaces
         Task<AuthResponseDto> ForgotPasswordAsync(ForgotPasswordDto dto);
 
         Task<AuthResponseDto> ResetPasswordAsync(ResetPasswordDto dto);
+
+
+
     }
 }
