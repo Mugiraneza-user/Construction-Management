@@ -51,8 +51,8 @@ public class ApplicationDbContext : DbContext
                .HasColumnName("date_joined");
                 entity.Property(x => x.Disabled)
                 .HasColumnName("disabled");
-               entity.Property(x => x.LastLogin)
-               .HasColumnName("last_login");
+               entity.Property(x=> x.EmailVerified)
+               .HasColumnName("email_verified");
         })  ;
 
         modelBuilder.Entity<SignupOtp>(entity =>

@@ -204,8 +204,16 @@ namespace mks.Services
             }
 
             user.EmailVerified = true;
+             Console.WriteLine(user.EmailVerified);
 
-            await _context.SaveChangesAsync();
+                Console.WriteLine(_context.Entry(user).State);
+
+                var rows = await _context.SaveChangesAsync();
+
+                Console.WriteLine(rows);
+            
+            //  await _context.SaveChangesAsync();
+            
 
             await _otpService.DeleteOtpAsync(dto.Email);
 
@@ -216,9 +224,12 @@ namespace mks.Services
             response.Username = user.Username;
             response.Email = user.Email;
             response.Role = user.Role;
+            
 
             return response;
         }
+        
+        
                
 
                 public async Task<AuthResponseDto> ForgotPasswordAsync(
@@ -279,7 +290,12 @@ namespace mks.Services
 
                         return response;
                     }
-
+                    
+                    if (PasswordHasher.Verify(dto.NewPassword, user.Password))
+                    {
+                        response.Success= false;
+                        response.Message = "Password has been used before, create a new one";
+                    }
                     user.Password = PasswordHasher.Hash(dto.NewPassword);
 
                     await _context.SaveChangesAsync();

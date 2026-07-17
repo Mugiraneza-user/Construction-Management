@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Identity.Client;
 
 namespace mks.Models
 
@@ -8,7 +9,6 @@ namespace mks.Models
 
         public class User
         {
-        internal bool EmailVerified;
 
         public int Id { get; set; }
 
@@ -37,5 +37,7 @@ namespace mks.Models
             public int? WorkerId { get; set; }
 
             public bool Disabled { get; set; }
+
+            public bool EmailVerified{get; set;}
         }
 }
