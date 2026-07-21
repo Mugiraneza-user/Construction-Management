@@ -19,10 +19,12 @@ namespace mks.DTOs
         public string Password { get; set; } = string.Empty;
 
         [Required]
-        public string Role { get; set; } = "worker";
+       
 
         public string? FirstName { get; set; }
 
         public string? LastName { get; set; }
+
+        public string Telephone {get; set;} = string.Empty;
     }
 }

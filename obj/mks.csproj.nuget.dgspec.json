@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Internership Projects\\house Management Backend\\mks\\mks.csproj": {}
+    "D:\\Internership Projects\\MKS Backend\\mks\\mks.csproj": {}
   },
   "projects": {
-    "D:\\Internership Projects\\house Management Backend\\mks\\mks.csproj": {
+    "D:\\Internership Projects\\MKS Backend\\mks\\mks.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Internership Projects\\house Management Backend\\mks\\mks.csproj",
+        "projectUniqueName": "D:\\Internership Projects\\MKS Backend\\mks\\mks.csproj",
         "projectName": "mks",
-        "projectPath": "D:\\Internership Projects\\house Management Backend\\mks\\mks.csproj",
+        "projectPath": "D:\\Internership Projects\\MKS Backend\\mks\\mks.csproj",
         "packagesPath": "C:\\Users\\educa\\.nuget\\packages\\",
-        "outputPath": "D:\\Internership Projects\\house Management Backend\\mks\\obj\\",
+        "outputPath": "D:\\Internership Projects\\MKS Backend\\mks\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\educa\\AppData\\Roaming\\NuGet\\NuGet.Config"

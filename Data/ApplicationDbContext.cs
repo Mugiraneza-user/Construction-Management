@@ -16,6 +16,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<SignupOtp> SignupOtps { get; set; }
 
+    public DbSet<Role> Role { get; set; } 
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,14 +47,16 @@ public class ApplicationDbContext : DbContext
               .HasColumnName("is_superuser");
                entity.Property(x => x.WorkerId)
               .HasColumnName("worker_id");
-               entity.Property(x => x.Role)
-              .HasColumnName("role");
                entity.Property(x => x.DateJoined)
                .HasColumnName("date_joined");
                 entity.Property(x => x.Disabled)
                 .HasColumnName("disabled");
                entity.Property(x=> x.EmailVerified)
                .HasColumnName("email_verified");
+               entity.Property(x=>x.Telephone)
+                .HasColumnName("telephone");
+                entity.Property(x=>x.role_id)
+                .HasColumnName("role_id");
         })  ;
 
         modelBuilder.Entity<SignupOtp>(entity =>
@@ -66,7 +70,20 @@ public class ApplicationDbContext : DbContext
                .HasColumnName("is_used");
         });
             
-
+        modelBuilder.Entity <Role> (entity =>
+        {
+          entity.ToTable("roles", "dbo");
+          entity.Property(a=>a.id)
+           .HasColumnName("id");
+           entity.Property(a=>a.role_name)
+            .HasColumnName("role_name");
+            entity.Property(a=>a.description)
+            .HasColumnName("description");
+            entity.Property(a=>a.is_active)
+            .HasColumnName("is_active");
+        }
+        
+         );
 
     }
 }

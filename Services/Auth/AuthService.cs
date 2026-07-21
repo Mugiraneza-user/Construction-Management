@@ -35,9 +35,7 @@ namespace mks.Services
 
              var connection = _context.Database.GetDbConnection();
 
-            Console.WriteLine("Database: " + connection.Database);
-            Console.WriteLine("Server: " + connection.DataSource);
-            // Check username
+    
             var usernameExists = await _context.Users
                 .AnyAsync(x => x.Username == dto.Username);
 
@@ -65,12 +63,9 @@ namespace mks.Services
                 Username = dto.Username,
                 Email = dto.Email,
                 Password = PasswordHasher.Hash(dto.Password),
-
+                Telephone= dto.Telephone,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-
-                Role = dto.Role,
-
                 IsActive = true,
                 Disabled = false,
                 IsStaff = false,
@@ -93,13 +88,9 @@ namespace mks.Services
                 otp);
 
             response.Success = true;
-            response.Message =
-                "Registration successful. OTP has been sent to your email.";
+            response.Message = "Registration successful. OTP has been sent to your email.";
 
-            response.UserId = user.Id;
-            response.Username = user.Username;
-            response.Email = user.Email;
-            response.Role = user.Role;
+            
 
             return response;
         }
@@ -164,12 +155,9 @@ namespace mks.Services
 
             response.Success = true;
             response.Message = "Login successful.";
-
             response.Token = token;
-            response.UserId = user.Id;
-            response.Username = user.Username;
-            response.Email = user.Email;
-            response.Role = user.Role;
+            
+            
 
             return response;
         }
@@ -219,12 +207,7 @@ namespace mks.Services
 
             response.Success = true;
             response.Message = "Email verified successfully.";
-
-            response.UserId = user.Id;
-            response.Username = user.Username;
-            response.Email = user.Email;
-            response.Role = user.Role;
-            
+         
 
             return response;
         }

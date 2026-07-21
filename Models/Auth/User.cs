@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Identity.Client;
 
 namespace mks.Models
@@ -31,13 +33,18 @@ namespace mks.Models
             public DateTime? LastLogin { get; set; }
 
             public DateTime DateJoined { get; set; }
-
-            public required string Role { get; set; }
+           
+            [ForeignKey("role_id")]
+           public Role Role { get; set; } = null!;
 
             public int? WorkerId { get; set; }
 
             public bool Disabled { get; set; }
 
             public bool EmailVerified{get; set;}
+
+            public required string?  Telephone{get; set;}
+
+            public int? role_id{get; set;} = 3 ;
         }
 }
