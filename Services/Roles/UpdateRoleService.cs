@@ -155,6 +155,46 @@ namespace mks.Services
                 Response= role
             };
         }
+
+        public async Task<ServiceResponse>RoleFilterAsync(RoleFilterDto filter)
+        {
+            var query= _context.Role.AsQueryable();
+
+            if (filter.id.HasValue)
+            {
+                query = query.Where(a=> a.id == filter.id.Value);
+            }
+            if (filter.is_active.HasValue)
+            {
+                query = query.Where(a=>a.is_active == filter.is_active.Value);
+            }
+            if (filter.created_at.HasValue)
+            {
+                query= query.Where(a=>a.created_at == filter.created_at.Value);
+            }
+            if (!string.IsNullOrEmpty(filter.role_name))
+            {
+                query = query.Where(a=> a.role_name.Contains(filter.role_name!));
+            }
+            var role= await query.ToListAsync();
+
+            if (!role.Any())
+            {
+                return new ServiceResponse
+                {
+                    Success= false,
+                    Message = "No role found"
+                };
+            }
+
+            return new ServiceResponse
+            {
+                Success= true,
+                Message= "Role retrieved successfully",
+                Response = role,
+            };
+        }
+
 }
 }
 

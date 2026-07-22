@@ -15,5 +15,9 @@ namespace mks.Interfaces
          Task<ServiceResponse>  DeactivateRoleAysnc(DeactivateRoleDto dto);
 
          Task <ServiceResponse> GetAllRoleAsync();
+
+         Task <ServiceResponse> RoleFilterAsync(RoleFilterDto filter);
+
+
     }
 }

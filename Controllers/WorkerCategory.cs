@@ -78,7 +78,16 @@ namespace mks.Controllers
             return Ok(result);
         }
 
+        [HttpGet("Get/query")]
+        public async Task<IActionResult> GetCategory([FromQuery] WorkerCategoryFilterDto filter)
+        {
+            var result = await _WorkerCategory.WorkerCategoryFilterAsync(filter);
 
+            if(!result.Success)
+            return BadRequest(result);
+
+            return Ok (result);
+        }
         
     }
 }

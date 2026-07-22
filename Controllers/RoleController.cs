@@ -74,6 +74,16 @@ namespace mks.Controllers
 
             return Ok (result);
         }
+        [HttpGet("Get/query")]
+        public async Task <IActionResult> GetRoleFilter([FromQuery]RoleFilterDto filter)
+        {
+            var result= await _updateRoles.RoleFilterAsync(filter);
+
+            if(!result.Success)
+              return BadRequest(result);
+
+              return Ok(result);
+        }
     }
 
 }

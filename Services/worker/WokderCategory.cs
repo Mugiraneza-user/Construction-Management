@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
 using System.Buffers;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore.Query;
 
 
 namespace mks.Services
@@ -152,6 +153,44 @@ namespace mks.Services
             {
                 Success= true,
                 Message= "Worker Categories Retrieved successfully",
+                Response = category,
+            };
+        }
+        public async Task<ServiceResponse> WorkerCategoryFilterAsync(WorkerCategoryFilterDto filter)
+        {
+            var query =  _context.WorkerCategories.AsQueryable();
+
+            if (filter.id.HasValue)
+            {
+                query= query.Where(a=>a.id == filter.id.Value);
+            }
+            if (!string.IsNullOrEmpty(filter.name))
+            {
+                query = query.Where(a=>a.name.Contains(filter.name!));
+            }
+            if (filter.salary_per_day.HasValue)
+            {
+                query=query.Where(a=>a.salary_per_day == filter.salary_per_day.Value);
+            }
+            if (filter.hour_per_day.HasValue)
+            {
+                query= query.Where(a=>a.hours_per_day == filter.hour_per_day.Value);
+            }
+            var category = await query.ToListAsync();
+
+            if (!category.Any())
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "No category found"
+                };
+            }
+
+            return new ServiceResponse{
+
+                Success = true,
+                Message= "worker category retrieved successfully",
                 Response = category,
             };
         }
