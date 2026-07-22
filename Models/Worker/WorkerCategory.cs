@@ -6,8 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class WorkerCategory
 {
+     public int id {get; set;}
     public string? name {get; set;}
     public int salary_per_day{ get ; set;}
 
     public int hours_per_day{get; set;}
+
+    public bool is_active{get; set;}
 }

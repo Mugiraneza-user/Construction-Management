@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 namespace mks.Controllers
 {
     [ApiController]
-    [Route("api/roles")]
+    [Route("api/admin/roles")]
     public class RolesController : ControllerBase
     {
         private readonly IUpdateRoleService _updateRoles;
@@ -62,6 +62,17 @@ namespace mks.Controllers
                return BadRequest (result);
 
             return Ok(result);   
+        }
+        [HttpGet("Get")]
+        public async Task<IActionResult> GetallRoles()
+        {
+            var result = await _updateRoles.GetAllRoleAsync();
+
+            if(!result.Success)
+
+            return BadRequest(result);
+
+            return Ok (result);
         }
     }
 

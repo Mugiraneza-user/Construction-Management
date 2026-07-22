@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<SignupOtp> SignupOtps { get; set; }
 
     public DbSet<Role> Role { get; set; } 
-
+    public DbSet<WorkerCategory> WorkerCategories{ get; set;}
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -84,6 +84,17 @@ public class ApplicationDbContext : DbContext
         }
         
          );
+
+        modelBuilder.Entity<WorkerCategory>(entity=>
+        {
+          entity.ToTable("worker_category","dbo");
+          entity.Property(a=>a.id);
+          entity.Property(a=>a.name);
+          entity.Property(a=>a.salary_per_day);
+          entity.Property(a=>a.hours_per_day);
+          entity.Property(a=>a.is_active);
+        }
+        ); 
 
     }
 }

@@ -143,6 +143,18 @@ namespace mks.Services
                 Message= "Role is deactivated successfully"
             };
         }
+
+        public async Task<ServiceResponse> GetAllRoleAsync()
+        {
+            var role= await _context.Role.ToListAsync();
+
+            return new ServiceResponse
+            {
+                Success= true,
+                Message= "Roles retrived well",
+                Response= role
+            };
+        }
 }
 }
 

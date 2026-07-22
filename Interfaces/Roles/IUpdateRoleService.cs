@@ -13,5 +13,7 @@ namespace mks.Interfaces
          Task<ServiceResponse> ActivateRoleAysnc(ActivateRoleDto dto);
 
          Task<ServiceResponse>  DeactivateRoleAysnc(DeactivateRoleDto dto);
+
+         Task <ServiceResponse> GetAllRoleAsync();
     }
 }
