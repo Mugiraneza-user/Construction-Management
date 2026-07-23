@@ -7,7 +7,7 @@ namespace mks.DTOs
    
     public class CreateWorkerPeriodDto
     {
-        public int id {get; set;}
+        // public int id {get; set;}
         public string name {get; set;} = string.Empty;
 
         public DateTime start_date {get; set;}

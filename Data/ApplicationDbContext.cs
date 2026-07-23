@@ -107,7 +107,10 @@ public class ApplicationDbContext : DbContext
           entity.Property(a=>a.id);
           entity.Property(a=>a.start_date);
           entity.Property(a=>a.end_date);
-          entity.Property(a=>a.status);
+          entity.Property(a=>a.status)
+           .HasConversion<string>();
+
+          base.OnModelCreating(modelBuilder);
         });
 
 

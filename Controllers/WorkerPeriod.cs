@@ -46,7 +46,7 @@ namespace mks.Controllers
             return Ok(result);
         }
          [HttpGet("period/query")]
-         public async Task<IActionResult> FilterWorkerPeriod(FilterWorkerPeriodDto filter)
+         public async Task<IActionResult> FilterWorkerPeriod([FromQuery]FilterWorkerPeriodDto filter)
         {
             var result = await _workerPeriod.FilterWorkerPeriodAsync(filter);
             if(!result.Success)

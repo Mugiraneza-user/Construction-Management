@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using mks.Data;
 using mks.DTOs;
+using mks.Enum;
 using mks.Interfaces;
 
 using mks.Models;
@@ -20,14 +21,6 @@ namespace mks.Services
 
         public async Task<ServiceResponse> CreateWorkerPeriodAsync(CreateWorkerPeriodDto dto)
         {
-            var period = await _context.WorkerPeriods.AnyAsync(a=> a.id == dto.id);
-
-            if(period)
-            return new ServiceResponse
-            {
-                Success= false,
-                Message="Id already used"
-            };
 
             var periodDate = await _context.WorkerPeriods.FirstOrDefaultAsync(a=> a.start_date == dto.start_date || a.end_date == dto.end_date);
 
@@ -87,6 +80,16 @@ namespace mks.Services
                 Success= false,
                 Message = "PeriodId not found"
             };
+
+        
+        if(!System.Enum.IsDefined(typeof(PeriodStatus), dto.status))
+         {
+        return new ServiceResponse
+            {
+            Success = false,
+            Message = "Invalid status. Allowed values are active or completed."
+            };
+          }
 
             status.status = dto.status;
             await _context.SaveChangesAsync();
