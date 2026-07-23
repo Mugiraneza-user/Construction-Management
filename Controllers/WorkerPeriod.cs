@@ -45,10 +45,19 @@ namespace mks.Controllers
 
             return Ok(result);
         }
-         [HttpGet("query")]
+         [HttpGet("period/query")]
          public async Task<IActionResult> FilterWorkerPeriod(FilterWorkerPeriodDto filter)
         {
             var result = await _workerPeriod.FilterWorkerPeriodAsync(filter);
+            if(!result.Success)
+            return BadRequest(result);
+
+            return Ok(result);
+        }
+          [HttpGet("period")]
+         public async Task<IActionResult> GetWorkerPeriod()
+        {
+            var result = await _workerPeriod.GetWorkerPeriodAsync();
             if(!result.Success)
             return BadRequest(result);
 

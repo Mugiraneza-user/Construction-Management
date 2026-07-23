@@ -12,5 +12,7 @@ namespace mks.Interfaces
         Task<ServiceResponse> UpdateWorkerPeriodStatusAsync(UpdateWorkerPeriodStatusDtoo dto);
 
         Task <ServiceResponse> FilterWorkerPeriodAsync(FilterWorkerPeriodDto filter);
+
+        Task<ServiceResponse> GetWorkerPeriodAsync();
     }
 }

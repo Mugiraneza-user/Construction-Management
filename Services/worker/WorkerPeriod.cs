@@ -139,5 +139,16 @@ namespace mks.Services
            }; 
             
         }
+        public async Task<ServiceResponse> GetWorkerPeriodAsync()
+        {
+            var period = await _context.WorkerPeriods.ToListAsync();
+
+            return new ServiceResponse
+            {
+                Success= true,
+                Message= "Worker Period Successfull",
+                Response = period
+            };
+        }
     }
 }
