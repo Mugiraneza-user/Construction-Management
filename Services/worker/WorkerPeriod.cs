@@ -110,7 +110,7 @@ namespace mks.Services
             }
             if (!string.IsNullOrEmpty(filter.name))
             {
-                query= query.Where(a=> a.name.Contains(filter.name));
+                query= query.Where(a=> a.name.Contains(filter.name!));
             }
             if (filter.status.HasValue)
             {
