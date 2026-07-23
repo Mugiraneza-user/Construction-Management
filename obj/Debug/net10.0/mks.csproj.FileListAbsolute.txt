@@ -2,6 +2,10 @@ D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\appsettings.Developme
 D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\appsettings.json
 D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.staticwebassets.endpoints.json
 D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.exe
+D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.deps.json
+D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.runtimeconfig.json
+D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.dll
+D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.pdb
 D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\Azure.Core.dll
 D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\Azure.Identity.dll
 D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\BCrypt-Net-Next.dll
@@ -156,9 +160,5 @@ D:\Internership Projects\MKS Backend\mks\obj\Debug\net10.0\mks.csproj.Up2Date
 D:\Internership Projects\MKS Backend\mks\obj\Debug\net10.0\mks.dll
 D:\Internership Projects\MKS Backend\mks\obj\Debug\net10.0\refint\mks.dll
 D:\Internership Projects\MKS Backend\mks\obj\Debug\net10.0\mks.pdb
-D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.deps.json
-D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.runtimeconfig.json
-D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.dll
-D:\Internership Projects\MKS Backend\mks\bin\Debug\net10.0\mks.pdb
 D:\Internership Projects\MKS Backend\mks\obj\Debug\net10.0\mks.genruntimeconfig.cache
 D:\Internership Projects\MKS Backend\mks\obj\Debug\net10.0\ref\mks.dll

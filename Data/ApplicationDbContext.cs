@@ -18,6 +18,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Role> Role { get; set; } 
     public DbSet<WorkerCategory> WorkerCategories{ get; set;}
+    public DbSet<WorkerPeriod> WorkerPeriods{get; set;}
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -94,7 +95,21 @@ public class ApplicationDbContext : DbContext
           entity.Property(a=>a.hours_per_day);
           entity.Property(a=>a.is_active);
         }
+
+
+        
         ); 
+
+        modelBuilder.Entity<WorkerPeriod>(entity =>
+        {
+          
+          entity.ToTable("work_period","dbo");
+          entity.Property(a=>a.id);
+          entity.Property(a=>a.start_date);
+          entity.Property(a=>a.end_date);
+          entity.Property(a=>a.status);
+        });
+
 
     }
 }
