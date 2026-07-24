@@ -100,8 +100,7 @@ namespace mks.Services
         {
             var response = new AuthResponseDto();
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(x => x.Email == dto.Email);
+            var user = await _context.Users .FirstOrDefaultAsync(x => x.Email == dto.Email);
 
             if (user == null)
             {
@@ -192,15 +191,10 @@ namespace mks.Services
             }
 
             user.EmailVerified = true;
-             Console.WriteLine(user.EmailVerified);
-
-                Console.WriteLine(_context.Entry(user).State);
-
-                var rows = await _context.SaveChangesAsync();
-
-                Console.WriteLine(rows);
             
-            //  await _context.SaveChangesAsync();
+
+                await _context.SaveChangesAsync();
+
             
 
             await _otpService.DeleteOtpAsync(dto.Email);
@@ -215,7 +209,7 @@ namespace mks.Services
         
                
 
-                public async Task<AuthResponseDto> ForgotPasswordAsync(
+             public async Task<AuthResponseDto> ForgotPasswordAsync(
                     ForgotPasswordDto dto)
                 {
                     var response = new AuthResponseDto();
@@ -251,8 +245,7 @@ namespace mks.Services
                 {
                     var response = new AuthResponseDto();
 
-                    var user = await _context.Users
-                        .FirstOrDefaultAsync(x => x.Email == dto.Email);
+                    var user = await _context.Users .FirstOrDefaultAsync(x => x.Email == dto.Email);
 
                     if (user == null)
                     {
@@ -262,9 +255,7 @@ namespace mks.Services
                         return response;
                     }
 
-                    var verified = await _otpService.VerifyOtpAsync(
-                        dto.Email,
-                        dto.Code);
+                    var verified = await _otpService.VerifyOtpAsync( dto.Email, dto.Code);
 
                     if (!verified)
                     {
