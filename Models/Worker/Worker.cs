@@ -4,24 +4,20 @@ using Microsoft.Identity.Client;
 using mks.Enum;
 
 namespace mks.model;
-
-public class Workers
+[Table("worker")]
+public class Worker
 {
     
  public int id {get ; set ;}
 
- public required string? worker_number{get ; set ;} 
+ public  string? worker_number{get ; set ;} 
 
- public required string? national_id{get; set;}
- public string? full_name{get ; set;}
+ public int national_id{get; set;}
+ public string full_name{get ; set;} = string.Empty;
 
- public string? telephone{get; set;}
+ public int telephone{get; set;}
  [ForeignKey("category_id")]
  public int category_id {get; set;}
-
-public int salary_per_day {get; set;}
-
-public WageType wage_type {get; set;}
 
 public string? bank_account {get; set;}
 

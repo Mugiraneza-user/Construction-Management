@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 using System.ComponentModel.DataAnnotations.Schema;
+using mks.Enum;
 
 [Table("worker_category")]
 
@@ -13,4 +14,6 @@ public class WorkerCategory
     public int hours_per_day{get; set;}
 
     public bool is_active{get; set;}
+
+    public WageType wage_type{get;set;}
 }

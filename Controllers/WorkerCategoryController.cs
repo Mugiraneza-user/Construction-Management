@@ -55,10 +55,10 @@ namespace mks.Controllers
 
              return Ok (result);
         }
-        [HttpPatch("Rename")]
-        public async Task<IActionResult> RenameCategory(RenameWorkerCategoryDto dto)
+        [HttpPatch("update")]
+        public async Task<IActionResult> UpdateCategory(UpdateWorkerCategoryDto dto)
         {
-            var result= await _WorkerCategory.RenameWorkerCategoryAsync(dto);
+            var result= await _WorkerCategory.UpdateWorkerCategoryAsync(dto);
             if (!result.Success)
                return BadRequest(result);
 
@@ -66,7 +66,7 @@ namespace mks.Controllers
 
         }
 
-        [HttpGet("Get")]
+        [HttpGet("all")]
         
         public async Task<IActionResult> GetCategory()
         {
@@ -78,7 +78,7 @@ namespace mks.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Get/query")]
+        [HttpGet("all/query")]
         public async Task<IActionResult> GetCategory([FromQuery] WorkerCategoryFilterDto filter)
         {
             var result = await _WorkerCategory.WorkerCategoryFilterAsync(filter);

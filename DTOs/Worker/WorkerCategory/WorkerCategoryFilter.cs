@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using mks.Enum;
 
 namespace mks.DTOs
 {
@@ -9,6 +10,8 @@ namespace mks.DTOs
         public int? salary_per_day{get; set;}
 
         public int? hour_per_day{get; set;}
+
+        public WageType? wage_type{get; set;}
         
         public string? name {get; set;}
     }

@@ -35,6 +35,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUpdateRoleService, UpdateRoleService>();
 builder.Services.AddScoped<IWorkerCategoryService, WorkerCategoryService>();
 builder.Services.AddScoped<IWorkerPeriodService, WorkerPeriodService>();
+builder.Services.AddScoped<IWorkerService, WorkerService>();
 
 var app = builder.Build();
 

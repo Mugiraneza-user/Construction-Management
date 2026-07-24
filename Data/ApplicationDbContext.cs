@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using mks.model;
 using mks.Models;
 namespace mks.Data;
 
@@ -19,6 +20,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Role> Role { get; set; } 
     public DbSet<WorkerCategory> WorkerCategories{ get; set;}
     public DbSet<WorkerPeriod> WorkerPeriods{get; set;}
+    public DbSet<Worker> workers{get; set;}
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -112,6 +114,24 @@ public class ApplicationDbContext : DbContext
 
           base.OnModelCreating(modelBuilder);
         });
+
+        modelBuilder.Entity<Worker>(entity=>
+        {
+          entity.ToTable("worker","dbo");
+
+        entity.Property(a=>a.national_id);
+        entity.Property(a=>a.category_id);
+         entity.Property(a=>a.bank_account);
+         entity.Property(a=>a.full_name);
+         entity.Property(a=>a.shift);
+         entity.Property(a=>a.telephone);
+         entity.Property(a=>a.status)
+           .HasConversion<string>();
+         entity.Property(a=>a.worker_number)
+           .HasComputedColumnSql("worker_number");
+         entity.Property(a=>a.id);
+         entity.Property(a=>a.date_joined);
+        } );
 
 
     }

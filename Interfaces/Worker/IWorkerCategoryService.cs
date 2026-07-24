@@ -11,7 +11,7 @@ namespace mks.Interfaces
 
         Task <ServiceResponse> DeleteWorkerCategoryAsync(DeleteWorkerCategoryDto dto);
 
-        Task <ServiceResponse> RenameWorkerCategoryAsync(RenameWorkerCategoryDto dto);
+        Task <ServiceResponse> UpdateWorkerCategoryAsync(UpdateWorkerCategoryDto dto);
 
         Task<ServiceResponse> ActivateWorkerCategoryAsync(ActivateWorkerCategoryDto dto);
 

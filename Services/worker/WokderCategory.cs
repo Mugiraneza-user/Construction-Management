@@ -72,7 +72,7 @@ namespace mks.Services
 
         }
 
-        public async Task<ServiceResponse> RenameWorkerCategoryAsync(RenameWorkerCategoryDto dto)
+        public async Task<ServiceResponse> UpdateWorkerCategoryAsync(UpdateWorkerCategoryDto dto)
         {
             var category = await _context.WorkerCategories.FirstOrDefaultAsync(a=>a.id== dto.id);
 
@@ -85,12 +85,16 @@ namespace mks.Services
             
              
              category.name=dto.name;
+             category.salary_per_day= dto.salary_per_day;
+             category.wage_type=dto.wage_type;
+             category.hours_per_day= dto.hours_per_day;
+
             
             await _context.SaveChangesAsync();
             return new ServiceResponse
             {
                 Success=true,
-                Message= $"Worker {category.name} category has been renamed well"
+                Message= $"Worker {category.name} category has been updated successfully"
             };
            
         }
