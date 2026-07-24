@@ -83,11 +83,18 @@ namespace mks.Services
                 Message="Worker category not found"            
           };
             
-             
+             if(!string.IsNullOrEmpty(dto.name))
              category.name=dto.name;
-             category.salary_per_day= dto.salary_per_day;
-             category.wage_type=dto.wage_type;
-             category.hours_per_day= dto.hours_per_day;
+
+             if(dto.salary_per_day.HasValue)
+             category.salary_per_day= dto.salary_per_day.Value;
+
+             if(dto.hours_per_day.HasValue)
+              category.hours_per_day= dto.hours_per_day.Value;
+
+              if(dto.wage_type.HasValue)
+             category.wage_type=dto.wage_type.Value;
+            
 
             
             await _context.SaveChangesAsync();

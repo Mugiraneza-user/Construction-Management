@@ -96,6 +96,8 @@ public class ApplicationDbContext : DbContext
           entity.Property(a=>a.salary_per_day);
           entity.Property(a=>a.hours_per_day);
           entity.Property(a=>a.is_active);
+          entity.Property(a=>a.wage_type)
+           .HasConversion<string>();
         }
 
 
@@ -123,7 +125,8 @@ public class ApplicationDbContext : DbContext
         entity.Property(a=>a.category_id);
          entity.Property(a=>a.bank_account);
          entity.Property(a=>a.full_name);
-         entity.Property(a=>a.shift);
+         entity.Property(a=>a.shift)
+         .HasConversion<string>();
          entity.Property(a=>a.telephone);
          entity.Property(a=>a.status)
            .HasConversion<string>();

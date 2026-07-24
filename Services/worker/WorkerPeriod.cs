@@ -56,11 +56,16 @@ namespace mks.Services
               Message = "Id not found"  
             };
 
-            
+               if(!string.IsNullOrEmpty(dto.name))
                 period.name= dto.name;
-                period.start_date = dto.start_date;
-                period.end_date= dto.end_date;
-                period.status = dto.status;
+
+                if(dto.start_date.HasValue)
+                period.start_date = dto.start_date.Value;
+
+                if(dto.end_date.HasValue)
+                period.end_date= dto.end_date.Value;
+                if(dto.status.HasValue)
+                period.status = dto.status.Value;
             
 
             await _context.SaveChangesAsync();

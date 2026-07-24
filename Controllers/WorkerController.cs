@@ -71,6 +71,16 @@ namespace mks.Controllers
 
             return Ok(result);
         }
+       [HttpPost("change/category")]
+        public async Task <IActionResult> UpdatePersonCategory([FromBody]UpdatePersonCategoryDto dto)
+        {
+            var result = await _worker.UpdatePersonCategoryAsync (dto);
+
+            if(!result.Success)
+            return BadRequest(result);
+
+            return Ok (result);
+        }
     }
 
 

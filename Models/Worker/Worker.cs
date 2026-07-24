@@ -12,10 +12,10 @@ public class Worker
 
  public  string? worker_number{get ; set ;} 
 
- public int national_id{get; set;}
+ public string? national_id{get; set;}
  public string full_name{get ; set;} = string.Empty;
 
- public int telephone{get; set;}
+ public string? telephone{get; set;}
  [ForeignKey("category_id")]
  public int category_id {get; set;}
 

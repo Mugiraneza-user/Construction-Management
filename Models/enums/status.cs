@@ -5,7 +5,7 @@ namespace mks.Enum {
     {
         OnLeave,
         
-        Deactive,
+        Inactive,
         Active
         
     }

@@ -4,11 +4,11 @@ using mks.Enum;
 namespace mks.DTOs{
     public class CreateWorkerDto
 {
-    public int national_id {get; set;} 
+    public string? national_id {get; set;} 
 
     public required string full_name{get; set;}
 
-    public required int telephone {get; set;}
+    public required string telephone {get; set;}
 
     public int category_id {get; set;}
 

@@ -14,5 +14,7 @@ namespace mks.Interfaces
         Task<ServiceResponse> FilterWorkerAsync(FilterWorkerDto filter);
 
         Task <ServiceResponse> ListAllWorkerAsync();
+
+        Task <ServiceResponse> UpdatePersonCategoryAsync(UpdatePersonCategoryDto dto);
     }
 }

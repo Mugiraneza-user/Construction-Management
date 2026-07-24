@@ -53,7 +53,7 @@ namespace mks.Services
 
         public async Task<ServiceResponse> UpdateWorkerAsync(UpdateWorkerDto dto)
         {
-            var worker = await _context.workers.FirstOrDefaultAsync(a=>a.worker_number == dto.worker_number);
+            var worker = await _context.workers.FirstOrDefaultAsync(a=>a.worker_number == dto.worker_number && a.category_id==dto.category_id);
 
             if(worker == null)
             return new ServiceResponse
@@ -62,13 +62,23 @@ namespace mks.Services
                 Message= "Worker not found"
             };
             
+            if(!string.IsNullOrEmpty(dto.full_name))
            worker.full_name= dto.full_name;
+
+           if(!string.IsNullOrEmpty(dto.national_id))
            worker.national_id=dto.national_id;
+
+           if(!string.IsNullOrEmpty(dto.bank_account))
            worker.bank_account=dto.bank_account;
+           if(!string.IsNullOrEmpty(dto.telephone))
            worker.telephone= dto.telephone;
-           worker.status=dto.status;
-           worker.shift= dto.shift;
-           worker.category_id=dto.category_id;
+           if(dto.status.HasValue)
+           worker.status=dto.status.Value;
+
+           if(dto.shift.HasValue)
+           worker.shift= dto.shift.Value;
+
+         
 
            await _context.SaveChangesAsync();
 
@@ -105,47 +115,62 @@ namespace mks.Services
         {
             var query= _context.workers.AsQueryable();
 
-            if (string.IsNullOrEmpty(filter.full_name))
+            if (!string.IsNullOrEmpty(filter.full_name))
             {
-                query= query.Where(a=>a.full_name.Contains(filter.full_name!));
+                query= query.Where(a=>a.full_name.Contains(filter.full_name));
             }
             if (filter.category_id.HasValue)
             {
-                query= query.Where(a=>a.category_id == filter.category_id);
+                query= query.Where(a=>a.category_id == filter.category_id.Value);
             }
 
             if (filter.date_joined.HasValue)
             {
-                query= query.Where(a=>a.date_joined == filter.date_joined);
-            }
-            if (filter.national_id.HasValue)
-            {
-                query = query.Where(a=>a.national_id == filter.national_id);
+                query= query.Where(a=>a.date_joined == filter.date_joined.Value);
             }
 
-            if (string.IsNullOrEmpty(filter.bank_account))
+            if (!string.IsNullOrEmpty(filter.national_id))
             {
-                query = query.Where(a=>a.bank_account.Contains(filter.bank_account!));
+                query = query.Where(a=>a.national_id.Contains(filter.national_id));
             }
-            if (string.IsNullOrEmpty(filter.worker_number))
+
+            if (!string.IsNullOrEmpty(filter.bank_account))
             {
-                query = query.Where(a=>a.worker_number.Contains(filter.worker_number!));
+                query = query.Where(a=>a.bank_account.Contains(filter.bank_account));
             }
-            if (filter.telephone.HasValue)
+            if (!string.IsNullOrEmpty(filter.worker_number))
             {
-                query=query.Where(a=>a.telephone == filter.telephone);
+                query = query.Where(a=>a.worker_number.Contains(filter.worker_number));
             }
-            if(!query.Any())
+            if (!string.IsNullOrEmpty(filter.telephone))
+            {
+                query=query.Where(a=>a.telephone.Contains(filter.telephone));
+            }
+            if (filter.shift.HasValue)
+            {
+                query = query.Where(a=>a.shift == filter.shift.Value);
+            }
+            if (filter.status.HasValue)
+            {
+                query=query.Where(a=>a.status == filter.status.Value);
+            }
+
+            var workers = await query.ToListAsync();
+
+            if(!workers.Any())
+            {
+
             return new ServiceResponse
             {
                 Success=false,
                 Message="Worker not found"
             };
+            }
             return new ServiceResponse
             {
                 Success=true,
                 Message="Worker retrived successsfully ",
-                Response = query
+                Response = workers
             };
 
         }
@@ -158,6 +183,35 @@ namespace mks.Services
                 Success= true,
                 Message= "Worker retrived successfully",
                 Response= worker
+            };
+        }
+        public async Task<ServiceResponse> UpdatePersonCategoryAsync(UpdatePersonCategoryDto dto)
+        {
+            var worker = await _context.workers.FirstOrDefaultAsync(a=>a.worker_number == dto.work_number);
+
+            if(worker == null)
+            return new ServiceResponse
+            {
+                Success = false,
+                Message ="Worker not found"
+            };
+            var categoryExist= await _context.WorkerCategories.FirstOrDefaultAsync(a=>a.id == dto.newcategory_id);
+
+            if (categoryExist == null)
+            return new ServiceResponse
+            {
+                Success= false,
+                Message= "Category not found "
+            };
+
+            worker.category_id=dto.newcategory_id;
+
+            await _context.SaveChangesAsync();
+            return new ServiceResponse
+            {
+                Success= true,
+                Message= "Worker category has been updated successfully",
+                Response = worker
             };
         }
     }
