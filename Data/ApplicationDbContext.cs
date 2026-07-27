@@ -22,6 +22,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<WorkerPeriod> WorkerPeriods{get; set;}
     public DbSet<Worker> workers{get; set;}
 
+    public DbSet<Attendance> Attendances{get; set;}
+
+    public DbSet<Payroll> payrolls{get;set;}
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -136,6 +140,30 @@ public class ApplicationDbContext : DbContext
          entity.Property(a=>a.date_joined);
         } );
 
+      modelBuilder.Entity<Attendance>(entity =>
+      {
+        entity.ToTable("attendance","dbo");
 
+        entity.Property(a=>a.id);
+        entity.Property(a=>a.period_id);
+         entity.Property(a=>a.worker_id);
+         entity.Property(a=>a.days);
+      });
+
+
+      modelBuilder.Entity<Payroll> (entity =>
+      {
+        entity.ToTable("payroll_record", "dbo");
+        entity.Property(a=>a.id);
+        entity.Property(a=>a.worker_id);
+        entity.Property(a=>a.category);
+        entity.Property(a=>a.salary_per_days);
+        entity.Property(a=>a.deductions);
+        entity.Property(a=>a.worker_name);
+        entity.Property(a=>a.net_salary);
+        entity.Property(a=>a.period_id);
+
+
+      });
     }
 }

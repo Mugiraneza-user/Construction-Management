@@ -36,6 +36,7 @@ builder.Services.AddScoped<IUpdateRoleService, UpdateRoleService>();
 builder.Services.AddScoped<IWorkerCategoryService, WorkerCategoryService>();
 builder.Services.AddScoped<IWorkerPeriodService, WorkerPeriodService>();
 builder.Services.AddScoped<IWorkerService, WorkerService>();
+builder.Services.AddScoped<IAttendanceService , AttendanceService>();
 
 var app = builder.Build();
 

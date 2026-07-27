@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 using System.ComponentModel.DataAnnotations.Schema;
 using mks.Enum;
-
+namespace mks.Models{
 [Table("worker_category")]
 
 public class WorkerCategory
@@ -16,4 +16,5 @@ public class WorkerCategory
     public bool is_active{get; set;}
 
     public WageType wage_type{get;set;}
+}
 }
