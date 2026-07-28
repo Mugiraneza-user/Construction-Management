@@ -9,7 +9,7 @@ public class WorkerCategory
 {
      public int id {get; set;}
     public string name {get; set;} = string.Empty;
-    public int salary_per_day{ get ; set;}
+    public decimal salary_per_day{ get ; set;}
 
     public int hours_per_day{get; set;}
 

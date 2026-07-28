@@ -25,7 +25,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Attendance> Attendances{get; set;}
 
     public DbSet<Payroll> payrolls{get;set;}
-
+public DbSet<Creditors> Creditor {get; set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -126,7 +126,7 @@ public class ApplicationDbContext : DbContext
           entity.ToTable("worker","dbo");
 
         entity.Property(a=>a.national_id);
-        entity.Property(a=>a.category_id);
+        entity.HasOne(a => a.Category).WithMany() .HasForeignKey(a => a.category_id) .OnDelete(DeleteBehavior.Restrict);
          entity.Property(a=>a.bank_account);
          entity.Property(a=>a.full_name);
          entity.Property(a=>a.shift)
@@ -135,9 +135,10 @@ public class ApplicationDbContext : DbContext
          entity.Property(a=>a.status)
            .HasConversion<string>();
          entity.Property(a=>a.worker_number)
-           .HasComputedColumnSql("worker_number");
+           .HasComputedColumnSql("worker_number") ;
          entity.Property(a=>a.id);
-         entity.Property(a=>a.date_joined);
+         entity.Property(a=>a.date_joined)
+          .HasDefaultValueSql("CURRENT_TIMESTAMP");;
         } );
 
       modelBuilder.Entity<Attendance>(entity =>
@@ -146,6 +147,7 @@ public class ApplicationDbContext : DbContext
 
         entity.Property(a=>a.id);
         entity.Property(a=>a.period_id);
+        
          entity.Property(a=>a.worker_id);
          entity.Property(a=>a.days);
       });
@@ -155,15 +157,25 @@ public class ApplicationDbContext : DbContext
       {
         entity.ToTable("payroll_record", "dbo");
         entity.Property(a=>a.id);
-        entity.Property(a=>a.worker_id);
-        entity.Property(a=>a.category);
-        entity.Property(a=>a.salary_per_days);
+        entity.Property(a => a.worker_id);
+        entity.HasOne(a=>a.worker).WithMany().HasForeignKey(a=>a.worker_id) ;
         entity.Property(a=>a.deductions);
-        entity.Property(a=>a.worker_name);
         entity.Property(a=>a.net_salary);
-        entity.Property(a=>a.period_id);
+        entity.HasOne(a=>a.Period).WithMany() .HasForeignKey(a=>a.period_id);
+        entity.Property(a=>a.days_worked);
 
 
+      });
+
+      modelBuilder.Entity<Creditors>(entity=>
+      {
+        entity.ToTable("creditor", "dbo");
+        entity.Property(a=>a.id);
+        entity.Property(a=>a.name);
+        entity.Property(a=>a.phone);
+        entity.Property(a=>a.notes);
+        entity.Property(a=>a.created_at)
+         .HasDefaultValueSql("CURRENT_TIMESTAMP");
       });
     }
 }

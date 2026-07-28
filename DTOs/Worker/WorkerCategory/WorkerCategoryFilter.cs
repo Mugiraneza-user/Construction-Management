@@ -7,7 +7,7 @@ namespace mks.DTOs
     {
         public int? id {get; set;}
 
-        public int? salary_per_day{get; set;}
+        public decimal? salary_per_day{get; set;}
 
         public int? hour_per_day{get; set;}
 

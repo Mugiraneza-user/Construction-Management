@@ -9,7 +9,7 @@ namespace mks.DTOs
         
         public  required string? name  {get; set;}
 
-        public required int salary_per_day {get; set;}
+        public required decimal salary_per_day {get; set;}
         public required int hours_per_day {get; set;}
 
         public WageType wage_type{get;set;}

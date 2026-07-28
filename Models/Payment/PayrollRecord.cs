@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using mks.model;
 
 namespace mks.Models{
 
@@ -14,19 +15,16 @@ namespace mks.Models{
    [ForeignKey("period_id")]
     public int period_id {get; set;}
 
-    public string? worker_name {get; set;}
+    public decimal days_worked { get; set;}
 
-    public string? category {get; set;}
-
-    public int days_worked { get; set;}
-
-    public int salary_per_days{get; set;}
-
-    public int deductions {get; set;}
-
-    public int net_salary {get; set;}
+    public decimal deductions {get; set;}
+     
+     public decimal gross_salary {get; set;}
+    public decimal net_salary {get; set;}
     
 
+    public Worker worker { get; set; } = null!;
 
+    public WorkerPeriod Period { get; set; } = null!;
 }
 }
