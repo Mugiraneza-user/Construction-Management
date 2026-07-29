@@ -53,9 +53,6 @@ namespace mks.Services
             }
 
             var attendance = await _context.Attendances.FirstOrDefaultAsync(x =>x.period_id == dto.period_id && x.worker_id == worker.worker_number);
-            Console.WriteLine($"Period ID: {dto.period_id}");
-                Console.WriteLine($"Worker ID from worker: {worker.id}");
-                Console.WriteLine($"Worker ID as string: {worker.id.ToString()}");
 
             if (attendance == null)
             {

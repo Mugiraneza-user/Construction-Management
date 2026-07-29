@@ -27,7 +27,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<Attendance> Attendances{get; set;}
 
     public DbSet<Payroll> payrolls{get;set;}
-public DbSet<Creditors> Creditor {get; set;}
+    public DbSet<Creditors> Creditor {get; set;}
+
+    public DbSet<Deduction> deductions{get;set;}
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -52,19 +55,19 @@ public DbSet<Creditors> Creditor {get; set;}
               .HasColumnName("is_active");
               entity.Property(x => x.IsStaff)
               .HasColumnName("is_staff");
-               entity.Property(x => x.IsSuperuser)
+              entity.Property(x => x.IsSuperuser)
               .HasColumnName("is_superuser");
-               entity.Property(x => x.WorkerId)
+              entity.Property(x => x.WorkerId)
               .HasColumnName("worker_id");
-               entity.Property(x => x.DateJoined)
+              entity.Property(x => x.DateJoined)
                .HasColumnName("date_joined");
-                entity.Property(x => x.Disabled)
+              entity.Property(x => x.Disabled)
                 .HasColumnName("disabled");
-               entity.Property(x=> x.EmailVerified)
+              entity.Property(x=> x.EmailVerified)
                .HasColumnName("email_verified");
-               entity.Property(x=>x.Telephone)
+              entity.Property(x=>x.Telephone)
                 .HasColumnName("telephone");
-                entity.Property(x=>x.role_id)
+              entity.Property(x=>x.role_id)
                 .HasColumnName("role_id");
         })  ;
 
@@ -178,5 +181,19 @@ public DbSet<Creditors> Creditor {get; set;}
         entity.Property(a=>a.created_at)
          .HasDefaultValueSql("CURRENT_TIMESTAMP");
       });
+
+    modelBuilder.Entity<Deduction>(entity =>
+    {
+      entity.ToTable("worker_deduction","dbo");
+        entity.Property(a=>a.id);
+        entity.Property(a=>a.created_at).HasDefaultValueSql("CURRENT_TIMESTAMP");
+        entity.Property(a=>a.amount);
+        entity.Property(a=>a.update_at) .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        entity.Property(a=>a.creditor_id);
+        entity.HasOne(a=>a.creditors).WithMany().HasForeignKey(a=>a.creditor_id);
+        entity.Property(a=>a.worker_id);
+        entity.HasOne(a=>a.worker).WithMany() .HasForeignKey(a=>a.worker_id);
+        
+    });
     }
 }
