@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using mks.Dtos;
 
 namespace mks.Models
 {
@@ -12,7 +13,7 @@ namespace mks.Models
         [ForeignKey("worker_id")]
         public String? worker_id{get; set;}
 
-        public string? days {get; set;} 
+           public List<AttendanceDayDto> days { get; set; } = new();
 
 
     }

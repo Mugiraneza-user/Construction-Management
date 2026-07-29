@@ -66,7 +66,7 @@ namespace mks.Services
                 };
             }
 
-            var attendanceDays = JsonSerializer.Deserialize<List<AttendanceDayDto>>(attendance.days)?? new List<AttendanceDayDto>();
+            var attendanceDays = attendance.days;
 
             decimal daysWorked = attendanceDays.Sum(x => x.value);
 

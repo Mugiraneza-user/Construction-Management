@@ -36,6 +36,7 @@ namespace mks.Services
                 shift=dto.shift,
                 telephone=dto.telephone,
                 category_id=dto.category_id,
+                date_joined=dto.date_joined,
                 bank_account=dto.bank_account,
 
             };

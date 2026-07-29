@@ -1,4 +1,6 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using mks.Dtos;
 using mks.model;
 using mks.Models;
 namespace mks.Data;
@@ -144,12 +146,11 @@ public DbSet<Creditors> Creditor {get; set;}
       modelBuilder.Entity<Attendance>(entity =>
       {
         entity.ToTable("attendance","dbo");
-
-        entity.Property(a=>a.id);
-        entity.Property(a=>a.period_id);
-        
+         entity.Property(a=>a.id);
+         entity.Property(a=>a.period_id);
          entity.Property(a=>a.worker_id);
-         entity.Property(a=>a.days);
+         entity.Property(a=>a.days)
+         .HasConversion( v=> JsonSerializer.Serialize(v, new JsonSerializerOptions()), v=> JsonSerializer.Deserialize<List<AttendanceDayDto>>(v, new JsonSerializerOptions()) ?? new ());
       });
 
 

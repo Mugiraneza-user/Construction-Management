@@ -6,6 +6,7 @@ using mks.DTOs;
 using mks.Interfaces;
 using mks.Models;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace mks.Services
 {
@@ -21,15 +22,21 @@ namespace mks.Services
         public async Task<ServiceResponse> CreateAttendanceAsync(CreateAttendanceDto dto)
 
         {
-            string daysJson = JsonSerializer.Serialize(dto.days);
-            var worker =  await _context.workers.AnyAsync(a=>a.worker_number == dto.worker_id);
+            var worker =  await _context.workers.FirstOrDefaultAsync(a=>a.worker_number == dto.worker_id);
 
-            if(!worker )
+            if(worker == null)
             return new ServiceResponse
             {
                 Success= false,
                 Message = "Worker not found"
             } ;
+        
+           if(worker.status != Enum.StatusType.Active)
+           return new ServiceResponse
+           {
+               Success=false,
+               Message= "Worker account is not active please activate it"
+           };
 
             var period = await _context.WorkerPeriods.AnyAsync(a=> a.id == dto.period_id);
 
@@ -39,16 +46,6 @@ namespace mks.Services
                Success = false,
                Message = "Period not found"
            };
-           bool exists = await _context.Attendances.AnyAsync(x => x.period_id == dto.period_id &&  x.worker_id == dto.worker_id);
-
-            if (exists)
-            {
-                return new ServiceResponse
-                {
-                    Success = false,
-                    Message = "Attendance already exists for this worker and period."
-                };
-            }
              foreach (var day in dto.days)
                 {
                     if (day.value != 0m &&
@@ -62,24 +59,58 @@ namespace mks.Services
                         };
                     }
                 }
-                var attendance = new Attendance
+                var attendance = await _context.Attendances.FirstOrDefaultAsync(x =>  x.period_id == dto.period_id && x.worker_id == dto.worker_id);
+
+                if (attendance == null)
+                {
+                 attendance = new Attendance
                     {
                         period_id = dto.period_id,
                         worker_id = dto.worker_id,
-                        days = daysJson
+                        days = dto.days
                     };
 
                     _context.Attendances.Add(attendance);
 
                     await _context.SaveChangesAsync();
-
-                    return new ServiceResponse
+                     return new ServiceResponse
                     {
                         Success = true,
-                        Message = "Attendance created successfully."
+                        Message = "Attendance created successfully.",
+                        Response= attendance
+
                     };
 
-        }
+                    }
+                    var existingDays = attendance.days;
+
+                        foreach (var newDay in dto.days)
+                        {
+                            if (existingDays.Any(d => d.date == newDay.date))
+                            {
+                                return new ServiceResponse
+                                {
+                                    Success = false,
+                                    Message = $"Attendance for {newDay.date} already exists."
+                                };
+                            }
+
+                            existingDays.Add(newDay);
+                        }
+
+                            attendance.days = existingDays;
+
+                            await _context.SaveChangesAsync();
+
+                            return new ServiceResponse
+                            {
+                                Success = true,
+                                Message = "Attendance updated successfully.",
+                                
+                                
+                            };
+         
+        } 
 
         public async Task <ServiceResponse> UpdateAttendanceAsync(UpdateAttendanceDto dto)
 
@@ -130,7 +161,7 @@ namespace mks.Services
                     
                 }
 
-                attend.days = JsonSerializer.Serialize(dto.days);
+                attend.days = dto.days;
                 _context.Attendances.Update(attend);
                 await _context.SaveChangesAsync();
 
@@ -196,6 +227,7 @@ namespace mks.Services
         public async Task<ServiceResponse> GetAttendanceAsync()
         {
             var attendance = await _context.Attendances.ToListAsync();
+                   
 
             return new ServiceResponse
             {
