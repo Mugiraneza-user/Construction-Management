@@ -19,7 +19,7 @@ namespace mks.model
 
        public DateTime created_at{get;set;}
 
-       public DateTime update_at{get;set;}
+       public DateTime updated_at{get;set;}
        public PaymentStatus status {get; set;}
 
        public Worker worker {get; set;}

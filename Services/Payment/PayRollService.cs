@@ -41,17 +41,6 @@ namespace mks.Services
                 };
             }
 
-            bool payrollExist = await _context.payrolls.AnyAsync(x =>x.period_id == dto.period_id && x.id == dto.worker_id);
-
-            if (payrollExist)
-            {
-                return new ServiceResponse
-                {
-                    Success = false,
-                    Message = "Payroll already generated."
-                };
-            }
-
             var attendance = await _context.Attendances.FirstOrDefaultAsync(x =>x.period_id == dto.period_id && x.worker_id == worker.worker_number);
 
             if (attendance == null)
@@ -63,6 +52,17 @@ namespace mks.Services
                 };
             }
 
+            var payrollExist = await _context.payrolls.FirstOrDefaultAsync(x=>x.period_id == dto.period_id && x.worker_id == dto.worker_id);
+
+            if(payrollExist != null)
+            return new ServiceResponse
+            {
+                Success = false ,
+                Message = "Payroll already generated"
+            };
+            
+            var deductions = await _context.deductions.Where(x =>  x.worker_id == worker.id &&  x.status == Enum.PaymentStatus.pending).ToListAsync();
+
             var attendanceDays = attendance.days;
 
             decimal daysWorked = attendanceDays.Sum(x => x.value);
@@ -70,8 +70,9 @@ namespace mks.Services
             decimal salaryPerDay = worker.Category.salary_per_day;
 
             decimal grossSalary = daysWorked * salaryPerDay;
+            decimal totalDeduction = deductions.Sum(x => x.amount);
 
-            decimal netSalary = grossSalary - dto.deductions;
+            decimal netSalary = grossSalary - totalDeduction;
 
             var payroll = new Payroll
             {
@@ -79,14 +80,12 @@ namespace mks.Services
                 period_id = dto.period_id,
                 days_worked = daysWorked,
                 gross_salary = grossSalary,
-                deductions = dto.deductions,
-                net_salary = netSalary
+                deductions = totalDeduction,
+                net_salary = netSalary,
+                status = Enum.PaymentStatus.paid
             };
 
             _context.payrolls.Add(payroll);
-            Console.WriteLine($"WorkerId = {payroll.worker_id}");
-            Console.WriteLine($"PeriodId = {payroll.period_id}");
-
             await _context.SaveChangesAsync();
 
             return new ServiceResponse

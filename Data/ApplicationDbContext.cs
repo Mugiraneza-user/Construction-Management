@@ -167,6 +167,7 @@ public class ApplicationDbContext : DbContext
         entity.Property(a=>a.net_salary);
         entity.HasOne(a=>a.Period).WithMany() .HasForeignKey(a=>a.period_id);
         entity.Property(a=>a.days_worked);
+        entity.Property(a=>a.status) .HasConversion<string>();
 
 
       });
@@ -188,11 +189,12 @@ public class ApplicationDbContext : DbContext
         entity.Property(a=>a.id);
         entity.Property(a=>a.created_at).HasDefaultValueSql("CURRENT_TIMESTAMP");
         entity.Property(a=>a.amount);
-        entity.Property(a=>a.update_at) .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        entity.Property(a=>a.updated_at) .HasDefaultValueSql("CURRENT_TIMESTAMP");
         entity.Property(a=>a.creditor_id);
         entity.HasOne(a=>a.creditors).WithMany().HasForeignKey(a=>a.creditor_id);
         entity.Property(a=>a.worker_id);
         entity.HasOne(a=>a.worker).WithMany() .HasForeignKey(a=>a.worker_id);
+        entity.Property(a=>a.status) .HasConversion<string>();
         
     });
     }

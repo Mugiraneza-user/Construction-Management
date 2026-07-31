@@ -5,8 +5,7 @@ namespace mks.DTOs
 {
     public class MakeDeductionDto
     {
-        public int id {get;set;}
-
+   
         public int creditor_id {get; set;}
 
         public required int worker_id{get; set;} 

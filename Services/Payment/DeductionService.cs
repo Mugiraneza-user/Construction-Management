@@ -43,7 +43,7 @@ namespace mks.Services
 
             var initialPayment = await _context.payrolls.FirstOrDefaultAsync(a=>a.worker_id == dto.worker_id);
 
-            if(initialPayment.net_salary != dto.amount)
+            if(initialPayment.net_salary < dto.amount)
             return new ServiceResponse
             {
                 Success=false,
@@ -53,9 +53,12 @@ namespace mks.Services
 
             var deduction = new Deduction
             {
+                worker_id = dto.worker_id,
+                creditor_id=dto.creditor_id,
                 reason= dto.reason,
                 amount = dto.amount,
                 created_at = dto.created_at,
+                status = PaymentStatus.pending
                 
 
             };
@@ -64,7 +67,7 @@ namespace mks.Services
             await _context.SaveChangesAsync();
             return new ServiceResponse
             {
-                Success = false,
+                Success = true,
                 Message = "Deduction applied successfully",
                 Response = deduction
             };

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using mks.Enum;
 using mks.model;
 
 namespace mks.Models{
@@ -21,7 +22,7 @@ namespace mks.Models{
      
      public decimal gross_salary {get; set;}
     public decimal net_salary {get; set;}
-    
+    public PaymentStatus status {get;set;}
 
     public Worker worker { get; set; } = null!;
 

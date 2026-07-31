@@ -8,6 +8,5 @@ namespace mks.DTOs
 
     public int worker_id { get; set; }
 
-    public decimal deductions { get; set; }
 }
 }
