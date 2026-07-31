@@ -40,7 +40,8 @@ builder.Services.AddScoped<IAttendanceService , AttendanceService>();
 builder.Services.AddScoped<ICreditorService , CreditorService>();
 builder.Services.AddScoped<IPayRollService , PayRollService>();
 builder.Services.AddScoped<IDeductionService, DeductionService>();
-
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentBatchService, PaymentBatchService>();
 
 
 

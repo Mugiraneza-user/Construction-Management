@@ -31,6 +31,9 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Deduction> deductions{get;set;}
 
+    public DbSet<Payment> payments{get;set;}
+    public DbSet<PaymentBatch>PaymentBatches{get;set;}
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -196,6 +199,43 @@ public class ApplicationDbContext : DbContext
         entity.HasOne(a=>a.worker).WithMany() .HasForeignKey(a=>a.worker_id);
         entity.Property(a=>a.status) .HasConversion<string>();
         
+    });
+
+    modelBuilder.Entity<Payment>(entity =>
+    {
+      entity.ToTable("payment", "dbo");
+
+      entity.Property(a=>a.id);
+      entity.Property(a=>a.payment_method) .HasConversion<string>();
+      entity.Property(a=>a.payment_number);
+      entity.Property(a=>a.worker_id);
+      entity.HasOne(a=>a.worker).WithMany() .HasForeignKey(a=>a.worker_id);
+      entity.Property(a=>a.period_id);
+      entity.HasOne(a=>a.period).WithMany() .HasForeignKey(a=>a.period_id);
+      entity.Property(a=>a.Payment_date) .HasDefaultValueSql("CURRENT_TIMESTAMP");
+      entity.Property(a=>a.payroll_id);
+      entity.HasOne(a=>a.payroll).WithMany().HasForeignKey(a=>a.payroll_id);
+      entity.Property(a=>a.notes);
+      entity.Property(a=>a.status) .HasConversion<string>();
+
+      
+    });
+
+    modelBuilder.Entity<PaymentBatch>(entity =>
+    {
+      entity.ToTable("payment_batch","dbo");
+
+      entity.Property(a=>a.id);
+      entity.Property(a=>a.category_id);
+      entity.HasOne(a=>a.category).WithMany() .HasForeignKey(a=>a.category_id);
+      entity.Property(a=>a.payment_date) .HasDefaultValueSql("CURRENT_TIMESTAMP");
+      entity.Property(a=>a.total_amount);
+      entity.Property(a=>a.notes);
+      entity.Property(a=>a.payment_method) .HasConversion<string>();
+      entity.Property(a=>a.period_id);
+      entity.HasOne(a=>a.period).WithMany().HasForeignKey(a=>a.period_id);
+      entity.Property(a=>a.status) .HasConversion<string>();
+      entity.Property(a=>a.batch_number);
     });
     }
 }

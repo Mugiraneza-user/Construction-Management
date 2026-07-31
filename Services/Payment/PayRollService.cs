@@ -82,7 +82,7 @@ namespace mks.Services
                 gross_salary = grossSalary,
                 deductions = totalDeduction,
                 net_salary = netSalary,
-                status = Enum.PaymentStatus.paid
+                status = Enum.PaymentStatus.pending
             };
 
             _context.payrolls.Add(payroll);
