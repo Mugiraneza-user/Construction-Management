@@ -25,7 +25,7 @@ namespace mks.Models
 
     public string? notes { get; set; }
 
-
+   
     public WorkerPeriod period { get; set; } = null!;
 
     public WorkerCategory? category { get; set; }

@@ -4,6 +4,7 @@ using mks.DTOs;
 using mks.Models;
 using Microsoft.EntityFrameworkCore;
 using mks.Dtos;
+using mks.Enum;
 
 namespace mks.Services
 {
@@ -35,6 +36,17 @@ namespace mks.Services
                 {
                     Success = false,
                     Message = "Payroll not found"
+                };
+            }
+
+            var paymentDone = await _context.payments.Include(a => a.worker).AnyAsync(a =>a.worker_id == dto.worker_id && a.period_id == dto.period_id && a.status == PaymentStatus.paid);
+
+            if (paymentDone)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "Payment has already been completed for this worker."
                 };
             }
             var payment = new Payment

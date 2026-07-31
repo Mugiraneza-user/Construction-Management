@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using mks.Dtos;
 using mks.Enum;
 using System.Collections.Immutable;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace mks.Services
 {
@@ -39,6 +40,15 @@ namespace mks.Services
                     Message = "Work period not found"
                 };
             }
+
+            var paymentDone= await _context.PaymentBatches.FirstOrDefaultAsync(a=>a.period_id == dto.period_id && a.category_id == dto.category_id);
+
+            if (paymentDone != null)
+            return new ServiceResponse
+            {
+                Success =false,
+                Message = "Payment for this batch has already done"
+            };
             var payrolls = await _context.payrolls.Include(a => a.worker).Where(a => a.period_id == dto.period_id && a.worker.category_id == dto.category_id).ToListAsync();
 
                 if (!payrolls.Any())
@@ -48,7 +58,18 @@ namespace mks.Services
                         Success = false,
                         Message = "No payrolls found for the selected period and category."
                     };
-                }
+                };
+            var alreadyPaid = await _context.payments.Include(a=>a.worker).AnyAsync(a=>a.period_id== dto.period_id && a.worker.category_id == dto.category_id && a.status == PaymentStatus.pending);
+
+            if (alreadyPaid)
+            {
+                    return new ServiceResponse
+                    {
+                        Success= false,
+                        Message = "All worker has been paid already"
+                    } ;   
+            }
+            
 
               decimal totalAmount = payrolls.Sum(a=>a.net_salary);
 
