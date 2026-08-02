@@ -212,7 +212,7 @@ public class ApplicationDbContext : DbContext
       entity.HasOne(a=>a.worker).WithMany() .HasForeignKey(a=>a.worker_id);
       entity.Property(a=>a.period_id);
       entity.HasOne(a=>a.period).WithMany() .HasForeignKey(a=>a.period_id);
-      entity.Property(a=>a.Payment_date) .HasDefaultValueSql("CURRENT_TIMESTAMP");
+      entity.Property(a=>a.payment_date) .HasDefaultValueSql("CURRENT_TIMESTAMP");
       entity.Property(a=>a.payroll_id);
       entity.HasOne(a=>a.payroll).WithMany().HasForeignKey(a=>a.payroll_id);
       entity.Property(a=>a.notes);

@@ -24,7 +24,7 @@ namespace mks.Models
     public int period_id {get; set;}
 
     public string? notes { get; set; }
-    public DateTime Payment_date {get; set;}
+    public DateTime payment_date {get; set;}
     public int? payment_batch_id { get; set; } 
 
      public PaymentBatch? paymentBatch{get; set;}

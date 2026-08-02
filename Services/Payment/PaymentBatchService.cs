@@ -49,27 +49,19 @@ namespace mks.Services
                 Success =false,
                 Message = "Payment for this batch has already done"
             };
-            var payrolls = await _context.payrolls.Include(a => a.worker).Where(a => a.period_id == dto.period_id && a.worker.category_id == dto.category_id).ToListAsync();
+      
+           
+            var payrolls = await _context.payrolls.Include(a => a.worker).Where(a =>a.period_id == dto.period_id && a.worker.category_id == dto.category_id &&  !_context.payments.Any(p => p.period_id == dto.period_id &&
+            p.worker_id == a.worker_id  )).ToListAsync();
 
-                if (!payrolls.Any())
+            if (!payrolls.Any())
+{
+                return new ServiceResponse
                 {
-                    return new ServiceResponse
-                    {
-                        Success = false,
-                        Message = "No payrolls found for the selected period and category."
-                    };
+                    Success = false,
+                    Message = "All workers have already been paid."
                 };
-            var alreadyPaid = await _context.payments.Include(a=>a.worker).AnyAsync(a=>a.period_id== dto.period_id && a.worker.category_id == dto.category_id && a.status == PaymentStatus.pending);
-
-            if (alreadyPaid)
-            {
-                    return new ServiceResponse
-                    {
-                        Success= false,
-                        Message = "All worker has been paid already"
-                    } ;   
             }
-            
 
               decimal totalAmount = payrolls.Sum(a=>a.net_salary);
 
@@ -81,6 +73,7 @@ namespace mks.Services
                 category_id = dto.category_id,
                 payment_method = dto.payment_method,
                 total_amount =totalAmount,
+                notes=dto.notes,
                 payment_date=DateTime.Now,
                 status = Enum.PaymentBatchStatus.Completed,
             };
@@ -102,12 +95,12 @@ namespace mks.Services
             worker_id = payroll.worker_id,
 
             payment_batch_id = batch.id,
-
+            notes=dto.notes,
             amount = payroll.net_salary,
 
             payment_method = dto.payment_method,
 
-            Payment_date = DateTime.Now,
+            payment_date = DateTime.Now,
 
             status = PaymentStatus.paid
         };
@@ -116,12 +109,12 @@ namespace mks.Services
     }
 
          await _context.SaveChangesAsync();  
-
             return new ServiceResponse
             {
                 Success = true,
-                Message = "Payment batch created successfully",
-                Response = batch
+                Message = "Payment batch created successfully"
+           
+           
             };
         }
 
@@ -131,8 +124,8 @@ namespace mks.Services
             return new ServiceResponse
             {
                 Success = true,
-                Message = "Payment batches retrieved successfully",
-                Response = batches
+                Message = "Payment batches retrieved successfully"
+  
             };
         }
         public async Task<ServiceResponse> FilterBatchAsync(FilterBatchPaymentDto filter)

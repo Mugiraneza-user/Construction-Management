@@ -65,7 +65,8 @@ namespace mks.Services
                 payroll_id = dto.payroll_id,
                 period_id=dto.period_id,
                 worker_id = dto.worker_id,
-               payment_batch_id = null,
+                payment_batch_id = null,
+                payment_date = DateTime.Now,
                 amount = payroll.net_salary,
                 notes = dto.notes,
 
@@ -74,6 +75,19 @@ namespace mks.Services
             _context.payments.Add(payment);
             await _context.SaveChangesAsync();
 
+            var updatePayroll = await _context.payrolls.FirstOrDefaultAsync(a => a.id == dto.payroll_id && a.period_id == dto.period_id);
+            if (updatePayroll == null)
+            {
+                 return new ServiceResponse
+                    {
+                        Success = false,
+                        Message = "Payroll to update not found."
+                    };
+                
+            }
+            
+            updatePayroll.status = Enum.PaymentStatus.paid;
+            await _context.SaveChangesAsync();
             return new ServiceResponse
             {
                 Success = true,
@@ -108,7 +122,7 @@ namespace mks.Services
 
             if (filter.payment_date.HasValue)
             {
-                query= query.Where(a=>a.Payment_date == filter.payment_date.Value);
+                query= query.Where(a=>a.payment_date == filter.payment_date.Value);
             }
 
             if (filter.paymentMethod.HasValue)
