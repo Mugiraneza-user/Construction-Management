@@ -218,7 +218,7 @@ public class ApplicationDbContext : DbContext
       entity.Property(a=>a.notes);
       entity.Property(a=>a.status) .HasConversion<string>();
       entity.Property(a=>a.payment_batch_id);
-      entity.HasOne(a=>a.paymentBatch) .WithMany(pb => pb.payments) .HasForeignKey(a=>a.payment_batch_id);
+      entity.HasOne(a=>a.paymentBatch) .WithMany(b => b.payments) .HasForeignKey(a=>a.payment_batch_id);
 
       
     });

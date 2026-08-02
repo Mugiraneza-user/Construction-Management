@@ -49,14 +49,23 @@ namespace mks.Services
                     Message = "Payment has already been completed for this worker."
                 };
             }
-            var payment = new Payment
+            var batch = await _context.PaymentBatches.AnyAsync(b => b.period_id == dto.period_id && b.category_id == worker.category_id && b.status == PaymentBatchStatus.Completed);
+
+                if (batch )
+                {
+                    return new ServiceResponse
+                    {
+                        Success = false,
+                        Message = "No completed payment batch found for this worker's category."
+                    };
+                }
+                            var payment = new Payment
             {
                 payment_number = $"PAY-{DateTime.Now:yyyyMMddHHmmss}",
-
                 payroll_id = dto.payroll_id,
                 period_id=dto.period_id,
                 worker_id = dto.worker_id,
-
+               payment_batch_id = null,
                 amount = payroll.net_salary,
                 notes = dto.notes,
 

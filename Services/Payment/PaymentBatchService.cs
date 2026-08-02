@@ -41,7 +41,7 @@ namespace mks.Services
                 };
             }
 
-            var paymentDone= await _context.PaymentBatches.FirstOrDefaultAsync(a=>a.period_id == dto.period_id && a.category_id == dto.category_id);
+            var paymentDone= await _context.PaymentBatches.FirstOrDefaultAsync(a=>a.period_id == dto.period_id && a.category_id == dto.category_id && a.status == PaymentBatchStatus.Completed); ;
 
             if (paymentDone != null)
             return new ServiceResponse
@@ -87,6 +87,36 @@ namespace mks.Services
             _context.PaymentBatches.Add(batch);
 
             await _context.SaveChangesAsync();
+
+               // create payments under batch
+    foreach(var payroll in payrolls)
+    {
+        var payment = new Payment
+        {
+            payment_number = $"PAY-{DateTime.Now:yyyyMMddHHmmss}-{payroll.worker_id}",
+
+            payroll_id = payroll.id,
+
+            period_id = dto.period_id,
+
+            worker_id = payroll.worker_id,
+
+            payment_batch_id = batch.id,
+
+            amount = payroll.net_salary,
+
+            payment_method = dto.payment_method,
+
+            Payment_date = DateTime.Now,
+
+            status = PaymentStatus.paid
+        };
+
+           _context.payments.Add(payment);
+    }
+
+         await _context.SaveChangesAsync();  
+
             return new ServiceResponse
             {
                 Success = true,
