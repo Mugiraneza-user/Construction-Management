@@ -1,0 +1,92 @@
+<div class="space-y-5 animate-fade-in-scale">
+  <div class="flex justify-center mb-4">
+    <div class="inline-flex p-1 bg-slate-100 rounded-full border border-slate-200/60 shadow-inner">
+      <button  type="button" 
+        class="px-6 py-2 text-xs font-semibold rounded-full bg-white text-slate-900 shadow-sm transition-all duration-200">
+        Sign in
+      </button>
+      <a   routerLink="/register"  class="px-6 py-2 text-xs font-semibold rounded-full text-slate-500 hover:text-slate-900 transition-all duration-200">
+        Register
+      </a>
+    </div>
+  </div>
+  <div *ngIf="errorMessage" class="p-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl">
+    {{ errorMessage }}
+  </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div class="space-y-1.5">
+      <label class="block text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
+        Email
+      </label>
+      <input 
+        type="email" 
+        formControlName="email"
+        placeholder="username@example.com" 
+        class="w-full px-4 py-3 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-50/40 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-slate-800 focus:ring-2 focus:ring-slate-950/5 outline-none transition-all"
+        [ngClass]="{'border-red-400 focus:border-red-500 focus:ring-red-100': loginForm.get('email')?.touched && loginForm.get('email')?.invalid}"
+      />
+      <p *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']" class="text-[10px] text-red-500">
+        Email address is required.
+      </p>
+      <p *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']" class="text-[10px] text-red-500">
+        Please enter a valid email.
+      </p>
+    </div>
+
+    
+    <div class="space-y-1.5">
+      <div class="flex justify-between items-center">
+        <label class="block text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
+          Password
+        </label>
+      </div>
+      <div class="relative">
+        <input 
+          [type]="showPassword ? 'text' : 'password'" 
+          formControlName="password"
+          placeholder="••••••••••••" 
+          class="w-full pl-4 pr-10 py-3 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-50/40 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-slate-800 focus:ring-2 focus:ring-slate-950/5 outline-none transition-all"
+          [ngClass]="{'border-red-400 focus:border-red-500 focus:ring-red-100': loginForm.get('password')?.touched && loginForm.get('password')?.invalid}"
+        />
+        <button 
+          type="button" 
+          (click)="togglePasswordVisibility()"
+          class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
+          
+          <svg *ngIf="!showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+          <svg *ngIf="showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.047 10.047 0 013.682-.763c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-1.99 1.99L3 3l18 18"/>
+          </svg>
+        </button>
+      </div>
+      
+    
+      <div class="flex justify-end pt-1">
+        <a 
+          routerLink="/reset-password" 
+          class="text-xs font-semibold text-slate-400 hover:text-slate-800 transition-colors">
+          Forgot password?
+        </a>
+      </div>
+    </div>
+
+   
+    <button 
+      type="submit" 
+      [disabled]="isLoading"
+      class="w-full py-3.5 px-4 mt-2 text-xs font-bold text-white bg-[#111111] hover:bg-black active:scale-[0.99] rounded-xl shadow-lg shadow-black/10 transition-all flex items-center justify-center gap-2 cursor-pointer">
+      <span *ngIf="!isLoading">Login </span>
+      <span *ngIf="isLoading" class="inline-flex items-center gap-2">
+        <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+        Signing in...
+      </span>
+    </button>
+
+  </form>
+</div>
