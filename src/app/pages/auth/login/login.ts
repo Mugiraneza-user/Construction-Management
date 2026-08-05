@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -10,17 +12,18 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
   templateUrl: './login.html'
 })
 export class Login {
-  loginForm: FormGroup;
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+
+  loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]]
+  });
+
   showPassword = false;
   isLoading = false;
   errorMessage = '';
-
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
@@ -32,18 +35,25 @@ export class Login {
       return;
     }
 
-    this.isLoading = true;
     this.errorMessage = '';
 
-    // Simulate login API call & navigate to OTP verification flow
-    setTimeout(() => {
-      this.isLoading = false;
-      // Navigate to OTP verification page
-      this.router.navigate(['/verify-otp']);
-    }, 1000);
-  }
+    const credentials = {
+      email: this.loginForm.value.email || '',
+      password: this.loginForm.value.password || ''
+    };
 
-  onGoogleSignIn(): void {
-    alert('Initiating Google Authentication...');
+    this.authService.login(credentials).subscribe({
+
+      next: (response) => {
+        this.isLoading = true;
+        if (response.success) {
+          this.router.navigate(['/verify-otp'], { queryParams: { email: credentials.email } });
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = error.error?.message || 'Invalid email or password. Please try again.';
+      }
+    });
   }
 }

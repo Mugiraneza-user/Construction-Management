@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -10,25 +11,23 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
   templateUrl: './register.html'
 })
 export class Register {
-  registerForm: FormGroup;
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+
+  registerForm = this.fb.group({
+    userName: ['', [Validators.required, Validators.minLength(3)]],
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    telephone: ['', [Validators.required]],
+    agreeTerms: [false, [Validators.requiredTrue]]
+  }); 
+
   showPassword = false;
   isLoading = false;
-
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.registerForm = this.fb.group({
-      fullName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required]],
-      agreeTerms: [false, [Validators.requiredTrue]]
-    }, { validators: this.passwordMatchValidator });
-  }
-
-  passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { passwordMismatch: true };
-  }
+  errorMessage = '';
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
@@ -41,15 +40,25 @@ export class Register {
     }
 
     this.isLoading = true;
+    this.errorMessage = '';
 
-    // Simulate Registration API & redirect to OTP Verification page
-    setTimeout(() => {
-      this.isLoading = false;
-      this.router.navigate(['/verify-otp']);
-    }, 1000);
-  }
+    const username = this.registerForm.value.userName || '';
+    const firstName = this.registerForm.value.firstName || '';
+    const lastName = this.registerForm.value.lastName || '';
+    const email = this.registerForm.value.email || '';
+    const password = this.registerForm.value.password || '';
+    const telephone = this.registerForm.value.telephone || '';
 
-  onGoogleSignUp(): void {
-    alert('Initiating Google Sign Up...');
+
+    this.authService.register({ firstName,lastName,telephone, email, password,username }).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.router.navigate(['/verify-otp'], { queryParams: { email } });
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
+      }
+    });
   }
 }

@@ -17,6 +17,11 @@
     </p>
   </div>
 
+  <!-- Error Alert Banner -->
+  <div *ngIf="errorMessage" class="p-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl text-center">
+    {{ errorMessage }}
+  </div>
+
   <!-- OTP Form -->
   <form [formGroup]="otpForm" (ngSubmit)="onVerify()" class="space-y-5">
     
@@ -28,11 +33,11 @@
           type="text" 
           inputmode="numeric"
           maxLength="1"
-          [formControl]="$any(digitsArray.controls[i])"
+          [formControl]="getControl(i)"
           (input)="onInput($event, i)"
           (keydown)="onKeyDown($event, i)"
           class="w-10 h-12 sm:w-11 sm:h-13 text-center text-lg font-bold border border-slate-200 rounded-xl bg-slate-50/50 text-slate-900 focus:bg-white focus:border-slate-900 focus:ring-2 focus:ring-slate-950/10 outline-none transition-all"
-          [ngClass]="{'border-red-400': digitsArray.at(i).touched && digitsArray.at(i).invalid}"
+          [ngClass]="{'border-red-400': getControl(i).touched && getControl(i).invalid}"
         />
       </ng-container>
     </div>

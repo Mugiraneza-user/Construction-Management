@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChildren, QueryList } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChildren, QueryList, inject } from '@angular/core';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-verify-otp',
@@ -9,30 +10,42 @@ import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } fr
   imports: [CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './verify-otp.component.html'
 })
-export class VerifyOtpComponent implements OnInit, OnDestroy {
+export class VerifyOtp implements OnInit, OnDestroy {
   @ViewChildren('otpInput') otpInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
-  otpForm: FormGroup;
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
+
   otpDigits = [0, 1, 2, 3, 4, 5];
+  otpForm = this.fb.group({
+    digits: this.fb.array(
+      this.otpDigits.map(() => this.fb.control('', [Validators.required, Validators.pattern(/^[0-9]$/)]))
+    )
+  });
+
   isLoading = false;
   resendTimer = 60;
   timerInterval: any;
   canResend = false;
   userEmail = 'username@example.com';
-
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.otpForm = this.fb.group({
-      digits: this.fb.array(
-        this.otpDigits.map(() => this.fb.control('', [Validators.required, Validators.pattern(/^[0-9]$/)]))
-      )
-    });
-  }
+  errorMessage = '';
 
   get digitsArray(): FormArray {
     return this.otpForm.get('digits') as FormArray;
   }
 
+  getControl(index: number): FormControl {
+    return this.digitsArray.at(index) as FormControl;
+  }
+
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['email']) {
+        this.userEmail = params['email'];
+      }
+    });
     this.startCountdown();
   }
 
@@ -62,11 +75,9 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
     const value = input.value;
 
     if (value.length > 0) {
-      // Keep only the last character
       const singleDigit = value.slice(-1);
       this.digitsArray.at(index).setValue(singleDigit);
 
-      // Move focus to next input
       if (index < this.otpDigits.length - 1) {
         const inputElements = this.otpInputs.toArray();
         inputElements[index + 1].nativeElement.focus();
@@ -107,18 +118,32 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
 
     const code = this.digitsArray.value.join('');
     this.isLoading = true;
+    this.errorMessage = '';
 
-    // Simulate OTP verification API call
-    setTimeout(() => {
-      this.isLoading = false;
-      alert(`Success! OTP Code (${code}) verified successfully.`);
-      this.router.navigate(['/login']);
-    }, 1200);
+    this.authService.verifyOtp({ email: this.userEmail, code }).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        alert(res.message || 'OTP Verified successfully!');
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = err.error?.message || 'Invalid verification code. Please check and try again.';
+      }
+    });
   }
 
   resendCode(): void {
     if (!this.canResend) return;
-    this.startCountdown();
-    alert('A new 6-digit OTP code has been sent to your email.');
+
+    this.authService.resendOtp(this.userEmail).subscribe({
+      next: (res) => {
+        this.startCountdown();
+        alert(res.message || 'A new verification code has been sent.');
+      },
+      error: () => {
+        this.startCountdown();
+      }
+    });
   }
 }

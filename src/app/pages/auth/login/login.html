@@ -21,7 +21,7 @@
       <input 
         type="email" 
         formControlName="email"
-        placeholder="username@example.com" 
+        placeholder="john@gmail.com" 
         class="w-full px-4 py-3 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-50/40 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-slate-800 focus:ring-2 focus:ring-slate-950/5 outline-none transition-all"
         [ngClass]="{'border-red-400 focus:border-red-500 focus:ring-red-100': loginForm.get('email')?.touched && loginForm.get('email')?.invalid}"
       />
@@ -61,6 +61,12 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.047 10.047 0 013.682-.763c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-1.99 1.99L3 3l18 18"/>
           </svg>
         </button>
+          <p *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']" class="text-[10px] text-red-500">
+            Password is required.
+          </p>
+          <p *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['minlength']" class="text-[10px] text-red-500">
+            Password must be at least 8 characters long.
+          </p>
       </div>
       
     
